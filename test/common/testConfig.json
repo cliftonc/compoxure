@@ -1,0 +1,257 @@
+{
+  "cdn": {
+    "url": "http://localhost:5001/static/"
+  },
+  "cookies": {
+    "whitelist": [
+      "CompoxureCookie",
+      "TSLCookie",
+      "siteCountry"
+    ]
+  },
+  "parameters": {
+    "urls": [
+      {
+        "pattern": "/pattern/.*-(\\d+)",
+        "names": [
+          "storyId"
+        ]
+      }
+    ],
+    "servers": {
+      "local": "http://localhost:5001",
+      "local-extension": "http://localhost:5011"
+    },
+    "urlGroups": [
+      {
+        "pattern": "/teaching-resource*",
+        "group": "resources"
+      },
+      {
+        "pattern": ".*",
+        "group": "home"
+      }
+    ]
+  },
+  "content": {
+    "server": "http://localhost:5001/content"
+  },
+  "renderContentOnErrorCode": [403],
+  "backend": [
+    {
+      "pattern": "/404backend",
+      "target": "http://localhost:5001/404backend"
+    },
+    {
+      "pattern": "/418backend",
+      "target": "http://localhost:5001/418backend"
+    },
+    {
+      "pattern": "/alternate500",
+      "quietFailure": true,
+      "ttl": 1,
+      "cacheKey": "cache:alternate500",
+      "target": "{{server:local}}/alternate500"
+    },
+    {
+      "pattern": "/nocachekey-alternate500",
+      "quietFailure": true,
+      "ttl": 1,
+      "dontPassUrl": true,
+      "target": "{{server:local}}/alternate500"
+    },
+    {
+      "pattern": "/403",
+      "target": "http://localhost:5001/403"
+    },
+    {
+      "pattern": "/302cached",
+      "cacheKey": "302cached",
+      "ttl": "1m",
+      "target": "http://localhost:5001/302cached"
+    },
+    {
+      "pattern": "/302",
+      "target": "http://localhost:5001/302"
+    },
+    {
+      "fn": "selectFnTest",
+      "target": "http://localhost:5001/selectFnBackend"
+    },
+    {
+      "pattern": "/quiet.*",
+      "target": "http://localhost:5001",
+      "quietFailure": true
+    },
+    {
+      "pattern": "/leave.*",
+      "target": "http://localhost:5001",
+      "quietFailure": true,
+      "leaveContentOnFail": true
+    },
+    {
+      "pattern": "/post.*",
+      "dontPassUrl": false,
+      "target": "http://localhost:5001",
+      "passThrough": true
+    },
+    {
+      "pattern": "/tracer",
+      "target": "http://localhost:5001/tracer"
+    },
+    {
+      "pattern": "/header",
+      "dontPassUrl": false,
+      "target": "http://localhost:5001",
+      "headers": [
+        "x-geoip-country-code"
+      ]
+    },
+    {
+      "pattern": "/differenthost",
+      "target": "http://localhost:5001/differenthost",
+      "host": "tes.co.uk"
+    },
+    {
+      "pattern": "/variabletarget",
+      "target": "{{server:local}}"
+    },
+    {
+      "name": "transformer",
+      "pattern": "/transformer",
+      "cacheKey": "cache-key",
+      "dontPassUrl": false,
+      "target": "{{server:local}}"
+    },
+    {
+      "name": "additionalHeaders",
+      "pattern": "/additionalHeaders",
+      "cacheKey": "additional-headers",
+      "target": "{{server:local}}",
+      "dontPassUrl": false,
+      "addResponseHeaders": {
+        "x-robots-tag": "noindex"
+      }
+    },
+    {
+      "name": "passThroughHeaders",
+      "pattern": "/passThroughHeaders",
+      "cacheKey": "allow-headers",
+      "target": "{{server:local}}",
+      "dontPassUrl": false,
+      "passThroughHeaders": [
+        "x-robots-tag"
+      ]
+    },
+    {
+      "name": "noCacheBackendViaFragment",
+      "pattern": "/noCacheBackendViaFragment",
+      "target": "{{server:local}}",
+      "dontPassUrl": false,
+      "cacheKey": "noCacheBackendViaFragment",
+      "passThroughHeaders": [
+        "cache-control"
+      ]
+    },
+    {
+      "name": "noCacheBackendFromFragmentNoKey",
+      "pattern": "/noCacheBackendFromFragmentNoKey",
+      "target": "{{server:local}}",
+      "dontPassUrl": false,
+      "cacheKey": "noCacheBackendFromFragmentNoKey",
+      "passThroughHeaders": [
+        "cache-control"
+      ]
+    },
+    {
+      "name": "noCacheBackendNoHeader",
+      "pattern": "/noCacheBackendNoHeader",
+      "dontPassUrl": false,
+      "target": "{{server:local}}"
+    },
+    {
+      "name": "noCacheBackendWithHeader",
+      "pattern": "/noCacheBackendWithHeader",
+      "dontPassUrl": false,
+      "target": "{{server:local}}",
+      "addResponseHeaders": {
+        "Cache-Control": "max-age=0",
+        "Surrogate-Key": "path:{{url:path}}"
+      }
+    },
+    {
+      "name": "noCacheBackend",
+      "pattern": "/noCacheBackend",
+      "noCache": true,
+      "dontPassUrl": false,
+      "target": "{{server:local}}",
+      "passThroughHeaders": [
+        "cache-control"
+      ]
+    },
+    {
+      "name": "noCacheBackendSetCookie",
+      "pattern": "/set-cookie",
+      "noCache": true,
+      "dontPassUrl": false,
+      "target": "{{server:local}}",
+      "passThroughHeaders": [
+        "cache-control"
+      ]
+    },
+    {
+      "pattern": [
+        "/arrayOfPattern1",
+        "/arrayOfPattern2"
+      ],
+      "dontPassUrl": false,
+      "target": "{{server:local}}"
+    },
+    {
+      "pattern": "/browser-extension",
+      "target": "http://localhost:5011/browser-extension-not-parsed"
+    },
+    {
+      "name": "different",
+      "noCache": false,
+      "dontPassUrl": false,
+      "passThroughHeaders": [
+        "x-guid"
+      ]
+    },
+    {
+      "name": "random",
+      "pattern": "/random",
+      "cacheKey": "{{url:path}}",
+      "dontPassUrl": false,
+      "target": "{{server:local}}"
+    },
+    {
+      "pattern": ".*",
+      "dontPassUrl": false,
+      "target": "http://localhost:5001"
+    }
+  ],
+  "circuitbreaker": {
+    "windowDuration": 10000,
+    "numBuckets": 10,
+    "errorThreshold": 100,
+    "volumeThreshold": 20
+  },
+  "statusCodeHandlers": {
+    "302": {
+      "fn": "handle302"
+    },
+    "418": {
+      "fn": "handle418"
+    }
+  },
+  "cache": {
+    "defaultNoCacheHeaders": {
+      "cache-control": "private, no-cache, max-age=0, must-revalidate, no-store"
+    },
+    "engine": "memorycache"
+  },
+  "followRedirect": false,
+  "fragmentDepth": 3
+}

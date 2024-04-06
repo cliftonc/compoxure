@@ -1,0 +1,18 @@
+dist: focal
+language: node_js
+sudo: false
+node_js:
+- '16'
+- '18'
+after_script:
+- npm run coveralls
+services:
+- redis-server
+deploy:
+  provider: npm
+  email: hopo@tes.com
+  api_key:
+    secure: Dqb1dxLrVK8/waR9XXLRUAgIdDUKe5m7HgLxUsdFnQ9O33mOAEoZd+u5FOxmSznJHCV+ylgqkkoIkmf1JIWk0bR37hMKh+C0umGXDHP3ntcHkw+7do84cdnZTqDEyaA/i4RKvJSlbNS0nPG6mpfrzWM8EXe/sDdrK/FRsNitwhE=
+  on:
+    branch: master
+    tags: true
